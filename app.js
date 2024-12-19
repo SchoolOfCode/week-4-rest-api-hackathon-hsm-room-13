@@ -6,7 +6,7 @@ INITIAL PLAN
     a. Store the raw data from database in a variable that we can import and use in our functions
     b. We need to figure out how to read the data from our database (also can edit/write file) ✅
         - use fs module to read data from database
-    c. use express libray to write the api endpoints 
+    c. use express libray to write the api endpoints ✅
         - listen for a get request from the client, and send back relevant data to display on postman
 */
 
@@ -22,7 +22,7 @@ import fs from 'fs/promises';
 
 const dataBasePath = './resource.json'
 
-// USE FS MODULE TO READ DATA FROM DATABASE
+// 1. USE FS MODULE TO READ DATA FROM DATABASE
     // import fs module
     // get readFile from the fs module and pass in our data file to read the data (built-in Node.js function for reading files asynchronously)
     // => store this data in a variable
@@ -36,6 +36,21 @@ async function readDinoData(){
 const dinoData = await readDinoData();
 console.log(dinoData)
 
+// 2. GET REQUEST FOR DATA API ENDPOINT
+    // listen for incoming GET requests on the root ('/') route
+    // when a GET request is made, use the helper function readDinoData() get the data from database
+    // after fetching the data, send it back to client as JSON response with 200 status response
+    // if catch error with 400 status
+
+app.get("/", async function (req, res) {
+    try {
+    const allDinos = await dinoData();
+    return res.status(200).json(allDinos);
+    }
+    catch(error){
+    return res.status(400)("error");
+    }
+});
 
 
 
