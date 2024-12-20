@@ -33,8 +33,7 @@ async function readDinoData(){
     return JSON.parse(data);
 };
 
-const dinoData = await readDinoData();
-console.log(dinoData)
+// const dinoData = await readDinoData();
 
 // 2. GET REQUEST FOR DATA API ENDPOINT
     // listen for incoming GET requests on the root ('/') route
@@ -44,7 +43,7 @@ console.log(dinoData)
 
 app.get("/", async function (req, res) {
     try {
-    const allDinos = await dinoData();
+    const allDinos = await readDinoData();
     return res.status(200).json(allDinos);
     }
     catch(error){
@@ -52,11 +51,28 @@ app.get("/", async function (req, res) {
     }
 });
 
+app.get("/:id", async function (req, res) {
+    try {
 
+    const dinoID = Number(req.params.id);
+    const matchingDino = await getAllDinoObjectByID(dinoID);
 
+    return res.status(200).json(matchingDino);
 
+    }
+    catch(error){
+    return res.status(400)("error");
+    }
+});
+ 
+async function getAllDinoObjectByID(dinoID){
 
+    const allDinos = await readDinoData();
+    const dinoObject = allDinos.find(dinoObject => dinoObject._id === dinoID);
 
+    return dinoObject;
+
+};
 
 // LISTEN FOR PORT CONNECTION
 
